@@ -6,7 +6,6 @@ import re
 from flask import Flask, render_template, request
 import pickle
 
-import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
@@ -32,12 +31,12 @@ def remove_unused(text):
     text = text.encode('ascii', 'ignore').decode('utf-8') 
     text = re.sub(r'[^\x00-\x7f]', r'', text)  
     text = re.sub(r'[^\w]', ' ', text) #untuk menghiilangkan selain alpha numerik
-    #untuk menghilangkan double atau lebih spasi
+    # untuk menghilangkan double atau lebih spasi
     space = ['    ', '   ', '  ']
     for i in space:
         text = text.replace(i, ' ')
     text = text.lower().strip()
-    #text = text.translate(str.maketrans('', '', string.punctuation))
+    # text = text.translate(str.maketrans('', '', string.punctuation))
     return text
 
 def lemm(word):
@@ -49,7 +48,7 @@ def lemm(word):
 def bagofword(text):
     words= remove_unused(text)
     words = lemm(words)
-    #print('words : {}'.format(words))
+    # print('words : {}'.format(words))
     bag = vectorizer_bow.transform(words)
     return bag.toarray()
     
@@ -60,7 +59,7 @@ def prediction(text):
     else :
         bow = bagofword(text)
         result = model.predict(bow)[0]
-        #print('result : {}'.format(result))
+        # print('result : {}'.format(result))
         result_index = np.argmax(result)
         if result[result_index] >= error_treshold:
             result_index = np.argmax(result)
@@ -70,7 +69,7 @@ def prediction(text):
     return result_index
 
 def get_response(res_index, intent_json):
-    #print('clss : {}'.format(classes))
+    # print('clss : {}'.format(classes))
     if res_index=='unknown':
         result = 'I\'m sorry, I didnt get it'
     elif res_index=='empty':
