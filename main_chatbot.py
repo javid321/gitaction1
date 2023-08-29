@@ -29,8 +29,8 @@ response_list = []
 def remove_unused(text):
     text = re.sub("[0-9]+", "", text)  # untuk menghilangkan angka
     # untuk menghilangkan non-ASCII characters dan unicode
-    text = text.encode("ascii", "ignore").decode("utf-8") 
-    text = re.sub(r"[^\x00-\x7f]", r"", text)  
+    text = text.encode("ascii", "ignore").decode("utf-8")
+    text = re.sub(r"[^\x00-\x7f]", r"", text)
     text = re.sub(r"[^\w]", " ", text)  # untuk menghiilangkan selain alpha numerik
     # untuk menghilangkan double atau lebih spasi
     space = ["    ", "   ", "  "]
@@ -92,7 +92,7 @@ def get_response(res_index, intent_json):
         for i in list_of_intent:
             if i["tag"] == tag:
                 result = random.choice(i["responses"])
-                break      
+                break
     return result
 
 
