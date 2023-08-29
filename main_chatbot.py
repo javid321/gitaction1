@@ -14,7 +14,7 @@ intents = json.loads(open('./intents.json').read())
 intents_df = pd.read_json('./intents.json')
 
 # Flatten data
-df_chat = pd.json_normalize(intents, record_path =['intents'])
+df_chat = pd.json_normalize(intents, record_path = ['intents'])
 df_chat = df_chat[['tag', 'patterns']]
 df_chat = df_chat.explode(['patterns'], ignore_index=True)
 df_chat = pd.DataFrame(df_chat)
@@ -37,12 +37,14 @@ def remove_unused(text):
         text = text.replace(i, ' ')
     text = text.lower().strip()
     # text = text.translate(str.maketrans('', '', string.punctuation))
+    
     return text
 
 def lemm(word):
     words = tokenizer(word)
     words = [lemmatizer.lemmatize(text) for text in words]
     words = [" ".join(t for t in words)]
+    
     return words
 
 def bagofword(text):
@@ -50,6 +52,7 @@ def bagofword(text):
     words = lemm(words)
     # print('words : {}'.format(words))
     bag = vectorizer_bow.transform(words)
+    
     return bag.toarray()
     
 def prediction(text):
@@ -68,6 +71,7 @@ def prediction(text):
     
     return result_index
 
+
 def get_response(res_index, intent_json):
     # print('clss : {}'.format(classes))
     if res_index=='unknown':
@@ -82,6 +86,7 @@ def get_response(res_index, intent_json):
             if i['tag'] == tag:
                 result = random.choice(i['responses'])
                 break
+                
     return result
 
 
@@ -92,6 +97,7 @@ app = Flask(__name__, template_folder='template', static_folder='template')
 def home():
     global response_list
     response_list = []
+    
     return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
@@ -101,6 +107,7 @@ def predict():
     print('pred : {}'.format(ints))
     response = get_response(ints, intents)
     response_list.append([msg, response])
+    
     return render_template('index.html', response=response_list)
 
 if __name__ == '__main__':
