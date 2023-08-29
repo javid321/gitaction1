@@ -6,7 +6,6 @@ import re
 import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request
-
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
@@ -76,14 +75,14 @@ def prediction(text):
 def get_response(res_index, intent_json):
     # print("clss : {}".format(classes))
     if res_index == "unknown":
-        result = "I\"m sorry, I didnt get it"
+        result = 'I"m sorry, I didnt get it'
     elif res_index == "empty":
         result = random.choice(
             [
                 "what?, type something!",
                 "try to type something!",
                 "Hello?",
-                "you didnt type anything yet!"
+                "you didnt type anything yet!",
             ]
         )
     else:
@@ -114,6 +113,7 @@ def predict():
     response = get_response(ints, intents)
     response_list.append([msg, response])
     return render_template("index.html", response=response_list)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
