@@ -1,13 +1,14 @@
-import random
 import json
+import pickle
+import random
+import re
+
 import numpy as np
 import pandas as pd
-import re
 from flask import Flask, render_template, request
-import pickle
 
-from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
 
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open("./intents.json").read())
