@@ -1,7 +1,7 @@
 import json
+import pickle
 import random
 import re
-import pickle
 
 import numpy as np
 import pandas as pd
