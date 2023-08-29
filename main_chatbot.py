@@ -105,6 +105,7 @@ def home():
     response_list = []
     return render_template("index.html")
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
     msg = request.form.get("teks")
