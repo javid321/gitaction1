@@ -1,13 +1,14 @@
-import random
 import json
-import numpy as np
-import pandas as pd
+import random
 import re
-from flask import Flask, render_template, request
 import pickle
 
-from nltk.tokenize import word_tokenize
+import numpy as np
+import pandas as pd
+from flask import Flask, render_template, request
+
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
 
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open("./intents.json").read())
@@ -25,12 +26,13 @@ vectorizer_bow = pickle.load(open("model/240823_CountVecBoW_CBot.pkl", "rb"))
 model = pickle.load(open("model/240823_mdl_cbot_df.pkl", "rb"))
 response_list = []
 
+
 def remove_unused(text):
-    text = re.sub("[0-9]+", "", text) #untuk menghilangkan angka
+    text = re.sub("[0-9]+", "", text) # untuk menghilangkan angka
     #untuk menghilangkan non-ASCII characters dan unicode
     text = text.encode("ascii", "ignore").decode("utf-8") 
     text = re.sub(r"[^\x00-\x7f]", r"", text)  
-    text = re.sub(r"[^\w]", " ", text) #untuk menghiilangkan selain alpha numerik
+    text = re.sub(r"[^\w]", " ", text) # untuk menghiilangkan selain alpha numerik
     # untuk menghilangkan double atau lebih spasi
     space = ["    ", "   ", "  "]
     for i in space:
@@ -40,12 +42,14 @@ def remove_unused(text):
     
     return text
 
+
 def lemm(word):
     words = tokenizer(word)
     words = [lemmatizer.lemmatize(text) for text in words]
     words = [" ".join(t for t in words)]
     
     return words
+
 
 def bagofword(text):
     words= remove_unused(text)
@@ -54,7 +58,8 @@ def bagofword(text):
     bag = vectorizer_bow.transform(words)
     
     return bag.toarray()
-    
+
+
 def prediction(text):
     error_treshold = 0.70
     if text == "":
